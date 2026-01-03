@@ -1,0 +1,8 @@
+{
+  "measure_uuid": "b12f9c44-0d7b-42ef-a1c3-9981a9e1f001",
+  "canonical_fixture": "LED_4FT_STRIP",
+  "mounting": "Surface",
+  "emergency": true,
+  "controls": ["Occupancy Sensor"],
+  "normalized_quantity": 12
+}
