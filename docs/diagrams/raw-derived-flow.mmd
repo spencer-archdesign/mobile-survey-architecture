@@ -1,0 +1,5 @@
+flowchart TB
+  Raw["Raw Survey (observations + photos + notes)"] --> Derived["Derived/Normalized Model"]
+  Derived --> Decision["Compliance Decision (exceptions + assumptions)"]
+  Decision --> Snapshot["Export Snapshot (PDF + manifest + timestamps)"]
+  Raw --> Decision
