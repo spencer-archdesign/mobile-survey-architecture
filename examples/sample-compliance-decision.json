@@ -1,0 +1,15 @@
+{
+  "survey_uuid": "a1c3e8c9-22b5-4e3f-9f84-1caa9d4c0101",
+  "decision_version": 1,
+  "compliance_status": "NON_COMPLIANT",
+  "issues": [
+    "Missing lighting controls in basement corridor"
+  ],
+  "assumptions": [
+    "Fixtures without visible sensors assumed uncontrolled"
+  ],
+  "evidence_photos": [
+    "c9a10c4e-812a-4a66-9c1d-f11a4e7a0001"
+  ],
+  "decided_at": "2025-01-06T14:18:00-05:00"
+}
