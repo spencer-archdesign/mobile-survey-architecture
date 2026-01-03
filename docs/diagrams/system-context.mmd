@@ -1,0 +1,19 @@
+flowchart LR
+  subgraph Field["Field (Offline)"]
+    FMGo["FileMaker Go Survey Client"]
+    Surveyor["Surveyor"]
+    Surveyor --> FMGo
+  end
+
+  subgraph Server["Central (Hosted FileMaker)"]
+    Intake["Publish/Intake (Validation + Dedup)"]
+    Core["System of Record (Projects + Measures)"]
+    Review["Review + Compliance Workspace"]
+    Artifacts["Artifacts (PDF Snapshots + Manifests)"]
+  end
+
+  FMGo -->|Upload Package| Intake
+  Intake -->|Create Project + Import Measures| Core
+  Core --> Review
+  Review --> Artifacts
+  Intake -->|Upload Receipt| FMGo
