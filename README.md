@@ -125,7 +125,7 @@ Owns:
 ---
 
 ## Survey Lifecycle
-
+```text
 Draft
 ↓
 In Progress
@@ -139,7 +139,7 @@ Accepted (Server)
 In Review
 ↓
 Completed
-
+```
 Failure paths:
 - **Upload Failed** → retry safe
 - **Rejected by Intake** → correction required, re-publish
@@ -181,7 +181,7 @@ The system separates **observation**, **interpretation**, and **decision**.
 ---
 
 ## Repository Structure
-
+```text
 /
 ├── README.md
 ├── decision-records/
@@ -201,7 +201,7 @@ The system separates **observation**, **interpretation**, and **decision**.
 │   └── sample-export-manifest.json
 └── diagrams/
 └── (system context, lifecycle, data flow diagrams)
-
+```
 ---
 
 ## Decision Records
