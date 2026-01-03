@@ -1,4 +1,5 @@
 # LL88 Survey Pipeline  
+
 *Offline-First Field Survey Capture and One-Way Publish Subsystem*
 
 ## Purpose
@@ -181,6 +182,7 @@ The system separates **observation**, **interpretation**, and **decision**.
 ---
 
 ## Repository Structure
+
 ```text
 /
 ├── README.md
@@ -200,7 +202,7 @@ The system separates **observation**, **interpretation**, and **decision**.
 │   ├── sample-compliance-decision.json
 │   └── sample-export-manifest.json
 └── diagrams/
-└── (system context, lifecycle, data flow diagrams)
+    └── system context, lifecycle, data flow diagrams
 ```
 ---
 
