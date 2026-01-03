@@ -20,25 +20,25 @@ Rather than replacing the existing FileMaker platform, this subsystem enables **
 
 ## Problem Statement
 
-Lighting surveys are frequently conducted in **hostile field conditions**:
+Lighting surveys are conducted under real-world constraints:
 - no cell service (basements, stairwells, garages)
 - locked or inaccessible rooms
 - rushed site contacts
 - dirty or unsafe environments
 - incomplete visibility of fixtures and controls
 
-Historically, surveys were captured using:
-- handwritten notes transcribed later into FileMaker, or
-- notes and photos recorded on phones, manually re-entered via Excel imports
+Historically, surveys were captured via:
+- handwritten notes later transcribed into FileMaker, or
+- notes and photos captured on phones, imported through Excel and manually cleaned
 
-These workflows introduce:
+These approaches introduce:
 - inconsistent terminology and structure
-- transcription errors
+- transcription and interpretation errors
 - loss of contextual detail
-- delayed validation
+- delayed validation and review
 - high operational friction
 
-Critically, **photo context** (fixture condition, emergency ballasts, sensors, mounting type, lens state) is often as important as numeric counts — and is difficult to reconstruct after the fact.
+Critically, **photo context** (fixture condition, emergency ballasts, sensors, mounting type, lens state) is often as important as numeric counts — and cannot be reliably reconstructed after the fact.
 
 ---
 
@@ -47,13 +47,15 @@ Critically, **photo context** (fixture condition, emergency ballasts, sensors, m
 This subsystem introduces an **offline-first survey client** with **one-way publish semantics**.
 
 ### High-Level Flow
+
 1. Surveyor captures data on iPhone/iPad using FileMaker Go (offline)
-2. Survey data is packaged locally into a publishable unit
-3. Surveyor uploads (“publishes”) the survey when connectivity is available
-4. Central FileMaker server ingests the data and creates a new Project
+2. Survey data is assembled into a publishable package
+3. Surveyor publishes the survey when connectivity is available
+4. Central FileMaker server ingests the package and creates a canonical Project
 5. Office reviewers analyze compliance and generate proposals or recommendations
 
-There is **no bidirectional sync**. The field device is not a system of record.
+There is **no bidirectional synchronization**.  
+The field device is not a system of record.
 
 ---
 
@@ -64,8 +66,8 @@ There is **no bidirectional sync**. The field device is not a system of record.
 - structured measures (locations, quantities, fixture types)
 - photo capture and association
 - one-way publish to central database
-- basic field-generated PDFs
-- review and compliance analysis (server-side)
+- field-generated informational PDFs
+- server-side review and compliance analysis
 
 ### Explicit Non-Goals
 - real-time collaboration
@@ -79,17 +81,19 @@ There is **no bidirectional sync**. The field device is not a system of record.
 ## Actors
 
 - **Field Surveyor**  
-  Captures survey data and publishes completed surveys
+  Captures surveys and publishes completed packages
 
 - **Compliance Reviewer**  
-  Evaluates uploaded surveys for LL88 compliance
+  Evaluates uploaded surveys and determines LL88 compliance
 
 - **Operations / Admin**  
   Maintains templates, taxonomies, and validation rules
 
 ---
 
-## Bounded Contexts and Ownership
+## Architectural Boundaries
+
+The system is modeled as four bounded contexts:
 
 ### Field Capture (Offline Client)
 Owns:
@@ -101,26 +105,27 @@ Owns:
 
 ### Publish / Intake
 Owns:
-- upload validation
+- validation
 - deduplication
-- creation of canonical Project records
+- canonical record creation
 - acceptance or rejection of uploads
 
 ### Review & Compliance Workspace
 Owns:
 - compliance determinations
-- notes and exceptions
+- assumptions and exceptions
 - proposal triggers
 
 ### Artifacts
 Owns:
-- PDF exports
-- versioned snapshots
+- PDFs and reports
+- versioned export snapshots
 - audit-ready packets
 
 ---
 
 ## Survey Lifecycle
+
 Draft
 ↓
 In Progress
@@ -147,10 +152,10 @@ Once accepted by the server, the survey is **logically immutable** on the device
 
 This system uses **publish semantics**, not synchronization.
 
-- Each survey is packaged as an **Upload Package**
+- Surveys are packaged as **Upload Packages**
 - Uploads are **idempotent**
 - Re-uploading the same package does not create duplicates
-- Server generates an **Upload Receipt** (timestamp, IDs, status)
+- Server issues an **Upload Receipt**
 - Device copies may persist or be deleted without impact
 
 The server is the **system of record**.
@@ -159,53 +164,67 @@ The server is the **system of record**.
 
 ## Data Model Philosophy
 
-### Raw Data
-- what the surveyor entered
-- original photos
-- timestamps and device metadata
+The system separates **observation**, **interpretation**, and **decision**.
 
-### Derived Data
-- normalized fixture taxonomy
-- standardized locations
-- aggregated counts
+- **Raw Data**  
+  Field observations, notes, photos, timestamps (immutable post-upload)
 
-### Decisions
-- compliance determinations
-- reviewer notes
-- exceptions and assumptions
+- **Derived Data**  
+  Normalized fixtures, standardized spaces, calculated values (regenerable)
 
-### Artifacts
-- PDFs and reports
-- tied to a specific survey version
-- reproducible via manifests
+- **Decisions**  
+  Compliance determinations, assumptions, exceptions (versioned)
+
+- **Artifacts**  
+  PDFs and reports tied to a specific survey and decision version
 
 ---
 
-## Why This Architecture
+## Repository Structure
 
-This design:
-- preserves field speed and familiarity
-- minimizes sync complexity
-- supports offline reality
-- reduces transcription errors
-- retains photo-based context
-- scales cleanly within an existing FileMaker architecture
+/
+├── README.md
+├── decision-records/
+│   ├── ADR-0001-one-way-publish.md
+│   ├── ADR-0002-identifier-strategy.md
+│   ├── ADR-0003-export-snapshots.md
+│   └── ADR-0004-raw-vs-derived-data.md
+├── docs/
+│   ├── publish-intake.md
+│   ├── failure-modes.md
+│   └── data-model.md
+├── examples/
+│   ├── sample-upload-package.json
+│   ├── sample-upload-receipt.json
+│   ├── sample-derived-normalization.json
+│   ├── sample-compliance-decision.json
+│   └── sample-export-manifest.json
+└── diagrams/
+└── (system context, lifecycle, data flow diagrams)
 
 ---
 
 ## Decision Records
 
-See `/decision-records` for architecture decisions, including:
-- one-way publish vs sync
-- identifier strategy
-- export snapshotting
+Key architectural decisions are documented in `/decision-records`, including:
+- one-way publish vs bidirectional sync
+- offline-safe identifier strategy
+- raw vs derived data separation
+- export snapshot immutability
+
+---
+
+## Status
+
+This repository documents the **target architecture** for the survey pipeline.  
+Implementation details evolve independently within the existing FileMaker platform.
 
 ---
 
 ## What’s Next
 
-Future work may include:
-- intake validation rules
-- automated anomaly detection
-- integration with incentives and billing systems
-- read-only client access for audit review
+Potential extensions include:
+- automated intake validation rules
+- anomaly detection during review
+- integration with incentives, billing, and compliance filing
+- read-only audit access
