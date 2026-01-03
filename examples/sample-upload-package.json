@@ -1,0 +1,30 @@
+{
+  "upload_id": "8d3f9f2e-4e44-4e5c-9b42-1b5d8a92c9a1",
+  "survey": {
+    "survey_uuid": "a1c3e8c9-22b5-4e3f-9f84-1caa9d4c0101",
+    "address": "123 Main St, Brooklyn, NY",
+    "site_contact": {
+      "name": "John Smith",
+      "phone": "555-555-1212"
+    },
+    "captured_at": "2025-01-05T10:42:00-05:00",
+    "device": "iPad"
+  },
+  "measures": [
+    {
+      "measure_uuid": "b12f9c44-0d7b-42ef-a1c3-9981a9e1f001",
+      "location": "Basement Corridor",
+      "fixture_type": "4ft T8",
+      "quantity": 12,
+      "notes": "Some fixtures flickering"
+    }
+  ],
+  "photos": [
+    {
+      "photo_uuid": "c9a10c4e-812a-4a66-9c1d-f11a4e7a0001",
+      "measure_uuid": "b12f9c44-0d7b-42ef-a1c3-9981a9e1f001",
+      "filename": "basement_fixture_1.jpg",
+      "captured_at": "2025-01-05T10:45:12-05:00"
+    }
+  ]
+}
