@@ -1,4 +1,4 @@
-# LL88 Survey Pipeline  
+# Lighting Survey Pipeline  
 
 *Offline-First Field Survey Capture and One-Way Publish Subsystem*
 
